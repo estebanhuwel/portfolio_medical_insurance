@@ -1,4 +1,6 @@
+import random # I did it in first instance to create the full_name column
 import csv
+import pandas as pd
 
 # Initialization of the empty dictionary for each column
 data_dict = {
@@ -101,3 +103,60 @@ def average_age_with_children(children_count, ages, childrens):
 # Calculating the average age of individuals with one child
 average_age_one_child = average_age_with_children(1, data_dict["ages"], data_dict["childrens"])
 print("Average Age of Individuals with One Child:", average_age_one_child)
+
+# Test on pandas
+df1 = pd.read_csv('insurance.csv')
+# df1 = pd.DataFrame(data_dict)
+print(df1.head(4))
+def average_fn(df_pd, column_name):
+    return round(df_pd[column_name].mean())
+
+avg_age_pd = average_fn(df1, "age")
+print("This is the average Age, calculed with Pandas: " + str(avg_age_pd))
+
+# Lets say we have a list name, with first and last name, not separated if it is male or female.
+# The goal is to create a list combination long enough to feed my current data DataFrame so:
+first_names = [
+    "Adriana", "Alejandro", "Alicia", "Alonso", "Andrés", "Ángel", "Antonio", "Beatriz", 
+    "Carlos", "Carmen", "Catalina", "Cecilia", "Cristina", "Daniel", "David", "Diego", 
+    "Eduardo", "Elena", "Emilio", "Ernesto", "Fernando", "Francisco", "Gabriel", "Gloria", 
+    "Guillermo", "Héctor", "Ignacio", "Isabel", "Javier", "Jesús", "Joaquín", "Jorge", 
+    "José", "Juan", "Julia", "Laura", "Luis", "Manuel", "Marcos", "María", "Marta", 
+    "Martín", "Miguel", "Natalia", "Nicolás", "Óscar", "Pablo", "Patricia", "Pedro", 
+    "Raúl", "Ricardo", "Rosa", "Salvador", "Santiago", "Silvia", "Teresa", "Tomás", 
+    "Victoria", "Ximena", "Yolanda", "Zacarías"
+]
+
+last_names = [
+    "Aguirre", "Alonso", "Álvarez", "Arias", "Benítez", "Blanco", "Cabrera", "Calvo", 
+    "Campos", "Cano", "Castillo", "Castro", "Cortés", "Delgado", "Díaz", "Domínguez", 
+    "Durán", "Escobar", "Fernández", "García", "Giménez", "Gómez", "González", "Guerrero", 
+    "Gutiérrez", "Hernández", "Iglesias", "Jiménez", "López", "Martínez", "Medina", "Mendoza", 
+    "Molina", "Moreno", "Muñoz", "Navarro", "Núñez", "Ortega", "Ortiz", "Pérez", "Ramírez", 
+    "Ramos", "Reyes", "Rodríguez", "Romero", "Ruiz", "Sánchez", "Santos", "Serrano", "Suárez", 
+    "Torres", "Vargas", "Vázquez", "Vega", "Velázquez", "Vicente", "Zamora", "Zapata"
+]
+
+# it is enough combinations?
+num_combinations = len(df1.age)
+
+assert len(first_names) * len(last_names) >= num_combinations, "There is not enough unique combinations, feed more!"
+
+full_name_list = set()
+while len(full_name_list) < num_combinations:
+    first_name = random.choice(first_names)
+    last_name = random.choice(last_names)
+    full_name_list.add(f"{first_name} {last_name}")
+
+full_name_list = list(full_name_list)
+
+get_first_name = lambda str: str.split(' ')[0]
+get_last_name = lambda str: str.split(' ')[-1]
+
+# Once we created the full_name_list, we add it to our DataFrame
+df1["Full Name"] = full_name_list
+# df1["First Name"] = df['Full Name'].apply(get_first_name) # if we want to add the first name in a new column
+# df1["Last Name"] = df['Last Name'].apply(get_last_name) # if we want to add the last name in a new column
+
+print(df1.head(4))
+
