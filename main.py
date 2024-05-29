@@ -182,3 +182,10 @@ general_avg["age"] = general_avg["age"].round()
 general_avg["bmi"] = general_avg["bmi"].round(2)
 general_avg["charges"] = general_avg["charges"].round(2)
 print(general_avg)
+
+# pivoted table, to create a easy view of the table with smokers / children / charges
+pivoted_general = smokers_group_kids_charge.pivot(
+    columns="children",
+    index="smoker",
+    values="charges")
+print(pivoted_general)
