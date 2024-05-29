@@ -160,3 +160,25 @@ df1["Full Name"] = full_name_list
 
 print(df1.head(4))
 
+# if we want to find how many, or average value of smokers for example, and know the average age of people who smokes or not:
+smokers_group_age = df1.groupby("smoker").age.mean()
+print(smokers_group_age)
+
+# average price of the insurance from smokers an no smokers
+smokers_group_charge = df1.groupby("smoker").charges.mean()
+print(smokers_group_charge)
+
+# average charge of insurance for smokers and the amount of kids
+smokers_group_kids_charge = df1.groupby(["smoker", "children"]).charges.mean()
+print(smokers_group_kids_charge)
+
+# because we noted that the insured people that smoke and have 5 kids is less than the avg charge we want to know the avg BMI
+smokers_children_group_bmi_charges = df1.groupby(["smoker", "children"])[['bmi', 'charges']].mean()
+print(smokers_children_group_bmi_charges)
+
+# now we want to do a more complex avg table
+general_avg = df1.groupby(["sex", "smoker", "children"])[['age', 'bmi', 'charges']].mean()
+general_avg["age"] = general_avg["age"].round()
+general_avg["bmi"] = general_avg["bmi"].round(2)
+general_avg["charges"] = general_avg["charges"].round(2)
+print(general_avg)
